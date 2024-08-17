@@ -40,3 +40,5 @@ File Name: mew.c
 Compilation Command: gcc -o mew mew.c
 Run Command: ./mew
 This process will compile and execute the malware scanner in a C environment.
+
+DISCLAIMER: This code is meant as a conceptual solution and please review the code in order to address issues on your own system.
