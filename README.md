@@ -18,7 +18,7 @@ The main function sets up a mock memory space and simulates the presence of a ma
 Steps to Compile and Run the C File
 Save the Code:
 
-Create a new file named malware_scanner.c.
+Create a new file named mew.c.
 Copy and paste the C code provided into this file.
 Compile the C Code:
 
@@ -27,7 +27,7 @@ Run the following command to compile the code:
 bash
 Copy code
 gcc -o mew mew.c
-This command tells gcc to compile malware_scanner.c and output an executable named malware_scanner.
+This command tells gcc to compile mew.c and output an executable named mew.
 Run the Executable:
 
 After compilation, run the executable by typing:
