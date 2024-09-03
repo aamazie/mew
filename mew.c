@@ -28,8 +28,9 @@ void check_stack_overflow(uint32_t *canary) {
 int scan_for_malware(const uint8_t *memory, size_t memory_size) {
     for (size_t i = 0; i < memory_size; ++i) {
         for (size_t j = 0; j < SIGNATURE_COUNT; ++j) {
-            if (memcmp(memory + i, malware_signatures[j], strlen(malware_signatures[j])) == 0) {
-                printf("Malware detected: Signature %zu found at memory address %p\n", j, memory + i);
+            size_t sig_len = strlen(malware_signatures[j]);
+            if (i + sig_len <= memory_size && memcmp(memory + i, malware_signatures[j], sig_len) == 0) {
+                printf("Malware detected: Signature %zu found at memory address %p\n", j, (void *)(memory + i));
                 attempt_terminate_malware();
                 return 1;
             }
@@ -40,8 +41,10 @@ int scan_for_malware(const uint8_t *memory, size_t memory_size) {
 
 // Function to attempt terminating a detected malware process (using killall for demo)
 void attempt_terminate_malware() {
-    const char *process_name = "malicious_process_name";
-    if (system("killall malicious_process_name") == 0) {
+    const char *process_name = "malicious_process_name"; // Replace with actual malicious process name
+    char command[256];
+    snprintf(command, sizeof(command), "killall %s", process_name);
+    if (system(command) == 0) {
         printf("Malicious process terminated successfully.\n");
     } else {
         printf("Failed to terminate malicious process. It may not be running or requires elevated privileges.\n");
@@ -51,9 +54,6 @@ void attempt_terminate_malware() {
 int main() {
     // Example memory space to scan (this would typically be your program or system memory)
     uint8_t memory_space[1024] = {0};
-
-    // Simulate writing malware signature to memory for detection demonstration
-    memcpy(memory_space + 512, "\x60\x89\xe5\x31\xc0\x31\xdb\x31\xc9\x31\xd2", 10); // Example shellcode
 
     // Set up stack canary
     uint32_t stack_canary = STACK_CANARY;
