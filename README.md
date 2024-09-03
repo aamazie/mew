@@ -1,5 +1,5 @@
 # mew
-mewtwo was a rust scanner with more features but this one is in c because everything uses c and c kernels have the vulns
+C will have memory safety issues, but this is Mewtwo in C. Mewtwo is recommended, as it's in Rust.
 
 Explanation:
 Malware Signatures:
@@ -16,6 +16,7 @@ Main Function:
 The main function sets up a mock memory space and simulates the presence of a malware signature. It then checks for stack overflows, scans for malware, and checks the stack again after scanning.
 
 Steps to Compile and Run the C File
+
 Save the Code:
 
 Create a new file named mew.c.
