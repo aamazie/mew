@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include <stdlib.h>  // Required for exit()
+#include <stdlib.h>
 
 // Example malware signatures (these are simplified for demonstration)
 const char *malware_signatures[] = {
@@ -14,53 +14,63 @@ const char *malware_signatures[] = {
 
 #define SIGNATURE_COUNT (sizeof(malware_signatures) / sizeof(malware_signatures[0]))
 
-// Stack canary value for detecting stack overflow
-#define STACK_CANARY 0xDEADC0DE
-
-// Function to check for stack overflow by verifying the canary value
-void check_stack_overflow(uint32_t *canary) {
-    if (*canary != STACK_CANARY) {
-        printf("Stack overflow detected! Halting execution...\n");
-        exit(1);  // Terminate the process
+// Function to read a file into memory
+uint8_t* read_file_to_memory(const char *filename, size_t *size) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        perror("Failed to open file");
+        return NULL;
     }
+
+    fseek(file, 0, SEEK_END);
+    *size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    uint8_t *buffer = (uint8_t *)malloc(*size);
+    if (!buffer) {
+        perror("Failed to allocate memory");
+        fclose(file);
+        return NULL;
+    }
+
+    fread(buffer, 1, *size, file);
+    fclose(file);
+    return buffer;
 }
 
 // Function to scan memory for malware signatures
 int scan_for_malware(const uint8_t *memory, size_t memory_size) {
     for (size_t i = 0; i < memory_size; ++i) {
         for (size_t j = 0; j < SIGNATURE_COUNT; ++j) {
-            if (memcmp(memory + i, malware_signatures[j], strlen(malware_signatures[j])) == 0) {
-                printf("Malware detected: Signature %zu found at memory address %p\n", j, memory + i);
-                return 1;  // Return immediately if malware is detected
+            size_t signature_length = strlen(malware_signatures[j]);
+            if (i + signature_length <= memory_size &&
+                memcmp(memory + i, malware_signatures[j], signature_length) == 0) {
+                printf("Malware detected: Signature %zu found at memory address %p\n", j, (void *)(memory + i));
+                return 1;  // Malware found
             }
         }
     }
-    return 0;
+    return 0;  // No malware found
 }
 
-int main() {
-    // Example memory space to scan (this would typically be your program or system memory)
-    uint8_t memory_space[1024] = {0};
-
-    // Simulate writing malware signature to memory for detection demonstration
-    memcpy(memory_space + 512, "\x60\x89\xe5\x31\xc0\x31\xdb\x31\xc9\x31\xd2", 10); // Example shellcode
-
-    // Set up stack canary
-    uint32_t stack_canary = STACK_CANARY;
-
-    // Check for stack overflow before scanning
-    check_stack_overflow(&stack_canary);
-
-    // Scan memory for malware signatures
-    if (scan_for_malware(memory_space, sizeof(memory_space))) {
-        printf("Malware detected in memory! Terminating process to prevent damage...\n");
-        exit(1);  // Terminate the process if malware is detected
-    } else {
-        printf("No malware detected.\n");
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return 1;
     }
 
-    // Final check for stack overflow after scanning
-    check_stack_overflow(&stack_canary);
+    size_t memory_size;
+    uint8_t *memory = read_file_to_memory(argv[1], &memory_size);
+    if (!memory) {
+        return 1;
+    }
 
+    if (scan_for_malware(memory, memory_size)) {
+        printf("Malware detected in file!\n");
+    } else {
+        printf("No malware detected in file.\n");
+    }
+
+    free(memory);
     return 0;
 }
