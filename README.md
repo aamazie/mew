@@ -48,9 +48,11 @@ Copy and paste the C code provided into this file.
 Compile the C Code:
 
 Use a C compiler like gcc to compile the file. Open a terminal and navigate to the directory where the file is saved.
+
 Run the following command to compile the code:
 
 gcc -o mew mew.c
+
 This command tells gcc to compile mew.c and output an executable named mew.
 
 Run the Executable:
@@ -60,8 +62,12 @@ After compilation, run the executable by typing:
 ./mew
 The program will then execute, performing the stack overflow check, scanning the simulated memory for malware, and printing the results to the terminal.
 Summary:
+
 File Name: mew.c
+
 Compilation Command: gcc -o mew mew.c
+
 Run Command: ./mew
+
 This process will compile and execute the malware scanner in a C environment.
 
