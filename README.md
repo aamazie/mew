@@ -10,7 +10,7 @@ Linux:
 
 Run the scanner with sudo:
 
-sudo ./scanner_program
+sudo ./mew.c
 
 Or set the binary with the setuid bit (not generally recommended for security reasons):
 
@@ -67,7 +67,7 @@ File Name: mew.c
 
 Compilation Command: gcc -o mew mew.c
 
-Run Command: ./mew
+Run Command: sudo ./mew
 
 This process will compile and execute the malware scanner in a C environment.
 
