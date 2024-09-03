@@ -1,5 +1,7 @@
 # mew
 
+Malware Scanner in C for Buffer Overflow and RAT Detection and Prevention.
+
 C will have memory safety issues, but this is Mewtwo in C. Mewtwo is recommended, as it's in Rust.
 
 Implementing the Permissions Setup:
