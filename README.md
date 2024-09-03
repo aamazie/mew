@@ -39,6 +39,8 @@ Main Function:
 
 The main function sets up a mock memory space and simulates the presence of a malware signature. It then checks for stack overflows, scans for malware, and checks the stack again after scanning.
 
+Process Memory: Code attempts to open and read the memory of other processes via the /proc/{pid}/mem files. On most Linux systems, reading these files directly is restricted to the process owner (usually root).
+
 Steps to Compile and Run the C File
 
 Save the Code:
