@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>  // Required for exit()
 
 // Example malware signatures (these are simplified for demonstration)
 const char *malware_signatures[] = {
@@ -20,7 +21,7 @@ const char *malware_signatures[] = {
 void check_stack_overflow(uint32_t *canary) {
     if (*canary != STACK_CANARY) {
         printf("Stack overflow detected! Halting execution...\n");
-        while (1); // Halt execution
+        exit(1);  // Terminate the process
     }
 }
 
@@ -30,7 +31,7 @@ int scan_for_malware(const uint8_t *memory, size_t memory_size) {
         for (size_t j = 0; j < SIGNATURE_COUNT; ++j) {
             if (memcmp(memory + i, malware_signatures[j], strlen(malware_signatures[j])) == 0) {
                 printf("Malware detected: Signature %zu found at memory address %p\n", j, memory + i);
-                return 1;
+                return 1;  // Return immediately if malware is detected
             }
         }
     }
@@ -52,7 +53,8 @@ int main() {
 
     // Scan memory for malware signatures
     if (scan_for_malware(memory_space, sizeof(memory_space))) {
-        printf("Malware detected in memory!\n");
+        printf("Malware detected in memory! Terminating process to prevent damage...\n");
+        exit(1);  // Terminate the process if malware is detected
     } else {
         printf("No malware detected.\n");
     }
