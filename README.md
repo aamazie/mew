@@ -14,9 +14,9 @@ sudo ./mew.c
 
 Or set the binary with the setuid bit (not generally recommended for security reasons):
 
-sudo chown root:root scanner_program
+sudo chown root:root mew.c
 
-sudo chmod u+s scanner_program
+sudo chmod u+s mew.c
 
 Windows:
 
