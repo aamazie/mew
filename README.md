@@ -2,6 +2,8 @@
 
 Malware Scanner in C for Buffer Overflow (NOP Sled) and RAT Detection and Prevention.
 
+NOP Sleds are effective ways to inject RATs and other malware. See the Malware Signatures list in the program to add your own signatures or to lengthen or shorten the NOP Sled.
+
 C will have memory safety issues, but this is Mewtwo in C. Mewtwo is recommended, as it's in Rust.
 
 Implementing the Permissions Setup:
